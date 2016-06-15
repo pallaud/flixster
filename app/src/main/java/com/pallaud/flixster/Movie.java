@@ -1,5 +1,9 @@
 package com.pallaud.flixster;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -7,29 +11,44 @@ import java.util.ArrayList;
  */
 public class Movie {
 
-    public String title;
-    public String posterUrl;
-    public int rating;
-
-    public Movie(String title, String posterUrl, int rating) {
-        this.title = title;
-        this.posterUrl = posterUrl;
-        this.rating = rating;
+    public String getOriginalTitle() {
+        return originalTitle;
     }
 
-    public static ArrayList<Movie> getFakeMovies() {
-        ArrayList<Movie> movies = new ArrayList<Movie>();
+    public String getPosterPath() {
+        return String.format("https://image.tmdb.org/t/p/w342/%s", posterPath);
+    }
 
-        for(int i=0; i<60; i++) {
-            movies.add(new Movie("The Social Network","",75));
-            movies.add(new Movie("The Internship", "", 50));
-            movies.add(new Movie("The Lion King", "", 100));
+    public String getOverview() {
+        return overview;
+    }
+
+    public String originalTitle;
+    public String posterPath;
+    public String overview;
+
+    public Movie(String originalTitle, String overview, String posterPath) {
+        this.originalTitle = originalTitle;
+        this.overview = overview;
+        this.posterPath = posterPath;
+    }
+
+    public Movie (JSONObject jsonObject) throws JSONException {
+        this.posterPath = jsonObject.getString("poster_path");
+        this.originalTitle = jsonObject.getString("original_title");
+        this.overview = jsonObject.getString("overview");
+    }
+
+    public static ArrayList<Movie> fromJsonArray(JSONArray jsonArray) {
+        ArrayList<Movie> results = new ArrayList<>();
+        for(int i=0; i< jsonArray.length(); i++) {
+            try {
+                results.add(new Movie(jsonArray.getJSONObject(i)));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-        return movies;
+        return results;
     }
 
-    @Override
-    public String toString() {
-        return title + " - " + rating;
-    }
 }

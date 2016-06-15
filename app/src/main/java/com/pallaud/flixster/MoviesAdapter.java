@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 /**
@@ -35,16 +37,15 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
 
         // Lookup view for data population
         TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-        ImageView ivPoster = (ImageView) convertView.findViewById(R.id.ivPoster);
+        TextView tvOverview = (TextView) convertView.findViewById(R.id.tvOverview);
+        ImageView ivImage = (ImageView) convertView.findViewById(R.id.ivImage);
+        // Clear our image from convertView
+        ivImage.setImageResource(0);
 
         // Populate the data into the template view using the data object
-        tvTitle.setText(movie.title);
-        //ivPoster.set
-        String imageUri = "https://i.imgur.com/tGbaZCY.jpg";
-        Picasso.with(getContext()).load(imageUri).into(ivPoster);
-
-        // Debug log ; name of class, what to print
-        //Log.d("MoviesAdapter", "Position : " + position);
+        tvTitle.setText(movie.getOriginalTitle());
+        tvOverview.setText(movie.getOverview());
+        Picasso.with(getContext()).load(movie.getPosterPath()).into(ivImage);
 
         // Return the completed view to render on screen
         return convertView;
