@@ -1,10 +1,15 @@
 package com.pallaud.flixster;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -23,6 +28,8 @@ public class MoviesActivity extends AppCompatActivity {
     ArrayList<Movie> movies;
     MoviesAdapter adapter;
     ListView lvMovies;
+    CheckBox cbCheck;
+    private final int REQUEST_CODE = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +41,9 @@ public class MoviesActivity extends AppCompatActivity {
         lvMovies = (ListView) findViewById(R.id.lvMovies);
         adapter = new MoviesAdapter(this,movies);
         lvMovies.setAdapter(adapter);
+        cbCheck = (CheckBox) findViewById(R.id.cbCheck);
 
+        // Setting up response handler
         String url = "https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(url, new JsonHttpResponseHandler(){
@@ -57,6 +66,15 @@ public class MoviesActivity extends AppCompatActivity {
             }
         });
 
-
+        lvMovies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View item, int pos, long rowId) {
+                Movie movie = movies.get(pos);
+                Intent i = new Intent(MoviesActivity.this, MovieDetails.class);
+                i.putExtra("movie",movie);
+                startActivity(i);
+            }
+        });
     }
+
 }

@@ -21,7 +21,11 @@
         android:id="@+id/tvOverview"
         android:layout_below="@+id/tvTitle"
         android:layout_toRightOf="@+id/ivImage"
-        android:layout_toEndOf="@+id/ivImage" />
+        android:layout_toEndOf="@+id/ivImage"
+        android:textColor="#ffffff"
+        android:maxLines="6"
+        android:ellipsize="end"
+        android:textSize="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -31,5 +35,19 @@
         android:id="@+id/tvTitle"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/ivImage"
-        android:layout_toEndOf="@+id/ivImage" />
+        android:layout_toEndOf="@+id/ivImage"
+        android:textColor="#ffffff"
+        android:textSize="20dp"
+        android:paddingTop="10dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cbCheck"
+        tools:checked="false"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 </RelativeLayout>
