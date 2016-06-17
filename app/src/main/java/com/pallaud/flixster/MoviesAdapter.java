@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -24,10 +25,14 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
  */
 public class MoviesAdapter extends ArrayAdapter<Movie> {
 
+    private final int POPULAR = 1;
+    private final int NOT_POPULAR = 0;
+
     private static class ViewHolder {
         TextView title;
         TextView overview;
         ImageView image;
+        ProgressBar popularity;
     }
 
     public MoviesAdapter(Context context, ArrayList<Movie> movies) {
@@ -35,19 +40,42 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
     }
 
     @Override
+    public int getItemViewType(int position) {
+        if(getItem(position).getPopularity() > 20) {
+            return POPULAR;
+        } else {
+            return NOT_POPULAR;
+        }
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 2;
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        // Has adapter get the data item for this position
         Movie movie = getItem(position);
+        int type = getItemViewType(position);
 
-        // **Check if an existing view is being reused, otherwise inflate the view; giving access to XML
-        // deals with recycling; if unseen, executes this line and creates new, else already has it
         ViewHolder viewHolder;
+
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_movie, parent, false);
+            switch (type) {
+                case POPULAR:
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.popular_movie, parent, false);
+                    viewHolder.overview = null;
+                    viewHolder.popularity = (ProgressBar) convertView.findViewById(R.id.pbPopularity);
+                    break;
+                case NOT_POPULAR:
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_movie, parent, false);
+                    viewHolder.overview = (TextView) convertView.findViewById(R.id.tvOverview);
+                    viewHolder.popularity = null;
+                    break;
+            }
             viewHolder.title = (TextView) convertView.findViewById(R.id.tvTitle);
-            viewHolder.overview = (TextView) convertView.findViewById(R.id.tvOverview);
             viewHolder.image = (ImageView) convertView.findViewById(R.id.ivImage);
             convertView.setTag(viewHolder);
         } else {
@@ -55,29 +83,19 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
         }
 
         viewHolder.title.setText(movie.getOriginalTitle());
-        viewHolder.overview.setText(movie.getOverview());
-
-        if((getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-                || (movie.getPopularity() > 20)) {
-            Picasso.with(getContext()).load(movie.getBackdropPath()).transform(new RoundedCornersTransformation(10, 10)).into(viewHolder.image);
-        } else {
-            Picasso.with(getContext()).load(movie.getPosterPath()).transform(new RoundedCornersTransformation(10, 10)).into(viewHolder.image);
+        if(viewHolder.overview != null) {
+            viewHolder.overview.setText(movie.getOverview());
+        } else if (viewHolder.popularity != null) {
+            viewHolder.popularity.setProgress((int)movie.getPopularity());
         }
 
-        //Pre viewholder
-
-//        // Lookup view for data population
-//        TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-//        TextView tvOverview = (TextView) convertView.findViewById(R.id.tvOverview);
-//        ImageView ivImage = (ImageView) convertView.findViewById(R.id.ivImage);
-//        // Clear our image from convertView
-//        ivImage.setImageResource(0);
-//
-//        // Populate the data into the template view using the data object
-//        tvTitle.setText(movie.getOriginalTitle());
-//        tvOverview.setText(movie.getOverview());
-//
-//        Picasso.with(getContext()).load(movie.getPosterPath()).into(ivImage);
+//        viewHolder.image.setScaleType(ImageView.ScaleType.FIT_XY);
+        if((getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                || (movie.getPopularity() > 20)) {
+            Picasso.with(getContext()).load(movie.getBackdropPath()).transform(new RoundedCornersTransformation(10, 10)).placeholder(R.drawable.placeholder_img).into(viewHolder.image);
+        } else {
+            Picasso.with(getContext()).load(movie.getPosterPath()).transform(new RoundedCornersTransformation(10, 10)).placeholder(R.drawable.placeholder_img).into(viewHolder.image);
+        }
 
         // Return the completed view to render on screen
         return convertView;
