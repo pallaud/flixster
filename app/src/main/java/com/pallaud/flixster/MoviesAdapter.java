@@ -66,7 +66,11 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
             switch (type) {
                 case POPULAR:
                     convertView = LayoutInflater.from(getContext()).inflate(R.layout.popular_movie, parent, false);
-                    viewHolder.overview = null;
+                    if((getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
+                        viewHolder.overview = (TextView) convertView.findViewById(R.id.tvOverview);
+                    } else {
+                        viewHolder.overview = null;
+                    }
                     viewHolder.popularity = (ProgressBar) convertView.findViewById(R.id.pbPopularity);
                     break;
                 case NOT_POPULAR:
@@ -86,10 +90,9 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
         if(viewHolder.overview != null) {
             viewHolder.overview.setText(movie.getOverview());
         } else if (viewHolder.popularity != null) {
-            viewHolder.popularity.setProgress((int)movie.getPopularity());
+            viewHolder.popularity.setProgress((int)movie.getPopularity()*2);
         }
 
-//        viewHolder.image.setScaleType(ImageView.ScaleType.FIT_XY);
         if((getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
                 || (movie.getPopularity() > 20)) {
             Picasso.with(getContext()).load(movie.getBackdropPath()).transform(new RoundedCornersTransformation(10, 10)).placeholder(R.drawable.placeholder_img).into(viewHolder.image);
