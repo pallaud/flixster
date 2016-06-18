@@ -25,6 +25,7 @@ public class MovieDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
 
+        // Gets movie information from intent, uses it to populate views
         movie = (Movie) getIntent().getSerializableExtra("movie");
 
         ((RatingBar) findViewById(R.id.rbVoteAvg)).setRating(movie.getRating());

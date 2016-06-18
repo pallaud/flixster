@@ -68,31 +68,38 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
                     convertView = LayoutInflater.from(getContext()).inflate(R.layout.popular_movie, parent, false);
                     if((getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
                         viewHolder.overview = (TextView) convertView.findViewById(R.id.tvOverview);
+                        viewHolder.title = (TextView) convertView.findViewById(R.id.tvTitle);
                     } else {
                         viewHolder.overview = null;
+                        viewHolder.title = null;
                     }
                     viewHolder.popularity = (ProgressBar) convertView.findViewById(R.id.pbPopularity);
                     break;
                 case NOT_POPULAR:
                     convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_movie, parent, false);
                     viewHolder.overview = (TextView) convertView.findViewById(R.id.tvOverview);
+                    viewHolder.title = (TextView) convertView.findViewById(R.id.tvTitle);
                     viewHolder.popularity = null;
                     break;
             }
-            viewHolder.title = (TextView) convertView.findViewById(R.id.tvTitle);
             viewHolder.image = (ImageView) convertView.findViewById(R.id.ivImage);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.title.setText(movie.getOriginalTitle());
+        // Populates non-null fields
+        if(viewHolder.title != null) {
+            viewHolder.title.setText(movie.getOriginalTitle());
+        }
         if(viewHolder.overview != null) {
             viewHolder.overview.setText(movie.getOverview());
-        } else if (viewHolder.popularity != null) {
+        }
+        if (viewHolder.popularity != null) {
             viewHolder.popularity.setProgress((int)movie.getPopularity()*2);
         }
 
+        // Using Picasso to load images, different images based on popularity/orientation
         if((getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
                 || (movie.getPopularity() > 20)) {
             Picasso.with(getContext()).load(movie.getBackdropPath()).transform(new RoundedCornersTransformation(10, 10)).placeholder(R.drawable.placeholder_img).into(viewHolder.image);
@@ -100,7 +107,6 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
             Picasso.with(getContext()).load(movie.getPosterPath()).transform(new RoundedCornersTransformation(10, 10)).placeholder(R.drawable.placeholder_img).into(viewHolder.image);
         }
 
-        // Return the completed view to render on screen
         return convertView;
 
     }

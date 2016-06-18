@@ -15,5 +15,5 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:background="@color/material_grey_900" />
+        android:background="@android:color/black" />
 </RelativeLayout>

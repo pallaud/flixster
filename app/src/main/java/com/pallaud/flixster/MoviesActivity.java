@@ -36,7 +36,6 @@ public class MoviesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movies);
 
-        // How to get elements from view
         movies = new ArrayList<Movie>();
         lvMovies = (ListView) findViewById(R.id.lvMovies);
         adapter = new MoviesAdapter(this,movies);
@@ -53,7 +52,6 @@ public class MoviesActivity extends AppCompatActivity {
                     movieJsonResults = response.getJSONArray("results");
                     movies.addAll(Movie.fromJsonArray(movieJsonResults));
                     adapter.notifyDataSetChanged();
-                    Log.d("DEBUG", movies.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -65,6 +63,7 @@ public class MoviesActivity extends AppCompatActivity {
             }
         });
 
+        // Listener for detail activity
         lvMovies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapter, View item, int pos, long rowId) {

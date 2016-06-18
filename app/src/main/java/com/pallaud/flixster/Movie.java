@@ -15,26 +15,19 @@ public class Movie implements Serializable {
     public String getOriginalTitle() {
         return originalTitle;
     }
+    public float getRating() { return rating; }
+    public double getPopularity() { return popularity; }
+    public String getOverview() {
+        return overview;
+    }
 
     public String getPosterPath() {
         return String.format("https://image.tmdb.org/t/p/w342/%s", posterPath);
     }
 
-    public String getOverview() {
-        return overview;
-    }
-
     public String getBackdropPath() {
         return String.format("https://image.tmdb.org/t/p/w500/%s", backdropPath);
     }
-
-    public String getBigBackdropPath() {
-        return String.format("https://image.tmdb.org/t/p/w1000/%s", backdropPath);
-    }
-
-    public float getRating() { return rating; }
-
-    public double getPopularity() { return popularity; }
 
     public String originalTitle;
     public String posterPath;
@@ -52,6 +45,7 @@ public class Movie implements Serializable {
         popularity = jsonObject.getDouble("popularity");
     }
 
+    // Takes array of JSON responses and return array of Movies created from JSON info
     public static ArrayList<Movie> fromJsonArray(JSONArray jsonArray) {
         ArrayList<Movie> results = new ArrayList<>();
         for(int i=0; i< jsonArray.length(); i++) {

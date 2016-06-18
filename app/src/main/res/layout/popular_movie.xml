@@ -22,7 +22,7 @@
         android:layout_below="@+id/pbPopularity"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textSize="15dp"
+        android:textSize="20dp"
         android:textColor="#ffffff"
         android:layout_marginLeft="5dp" />
 
@@ -32,11 +32,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/pbPopularity"
         android:indeterminate="false"
-        android:layout_alignBottom="@+id/ivImage"
         android:layout_alignLeft="@+id/tvTitle"
         android:layout_alignStart="@+id/tvTitle"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp" />
+        android:layout_below="@+id/ivImage"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
