@@ -26,6 +26,7 @@ The following **optional** features are implemented:
 The following **additional** features are implemented:
 
 * [ x] Add a 'favorite' button for users to mark movies they liked/want to watch
+* [ x] Popular movies have a different display (only backdrop poster) in portrait view
 
 ## Video Walkthrough
 
